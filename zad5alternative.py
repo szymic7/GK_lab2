@@ -1,46 +1,52 @@
 import sys
 from glfw.GLFW import *
 from OpenGL.GL import *
+import random
+
+# Vertices of the triangle
+vertices = [(-100, -100), (100, -100), (0, 100)]
+
+# Global variables to store random point's coordinates
+current_x = 0.0
+current_y = 0.0
+
+# Global variables to store random RGB color
+red = 0.0
+green = 0.0
+blue = 0.0
 
 def startup():
     update_viewport(None, 400, 400)
     glClearColor(0.0, 0.0, 0.0, 1.0)
-
+    glPointSize(2.0)  # Set point size for drawing
 
 def shutdown():
     pass
 
+# Method to generate random RGB color
+def randomColor():
+    global red, green, blue
+    red = random.random()
+    green = random.random()
+    blue = random.random()
+    glColor3f(red, green, blue)
 
-def renderRect(x, y, a, b):
-    # Drawing a first triangle - upper one
-    glBegin(GL_TRIANGLES)
-    glColor3f(1.0, 1.0, 0.0)
-    glVertex2f(x, y)
-    glVertex2f(x, y + b)
-    glVertex2f(x + a, y)
+# Method to find a random point according to Chaos game algorithm
+def random_point():
+    global current_x, current_y
+    current_x, current_y = random.choice(vertices)
+
+def renderSierpinskiChaos(num_points):
+    global current_x, current_y
+
+    glBegin(GL_POINTS)
+    for i in range(num_points):
+        target_vertex = random.choice(vertices)
+        current_x = (current_x + target_vertex[0]) / 2
+        current_y = (current_y + target_vertex[1]) / 2
+        glVertex2f(current_x, current_y)
     glEnd()
 
-    # Drawing a second triangle - lower one
-    glBegin(GL_TRIANGLES)
-    glVertex2f(x, y + b)
-    glVertex2f(x + a, y)
-    glVertex2f(x + a, y + b)
-    glEnd()
-
-def renderCarpet(x, y, a, b, level):
-    if level == 0:
-        renderRect(x, y, a, b)
-    else:
-        level = level - 1
-        width = a / 3.0
-        height = b / 3.0
-
-        for i in range(3):
-            for j in range(3):
-                if not (i == 1 and j == 1):
-                    newY = y + i * height
-                    newX = x + j * width
-                    renderCarpet(newX, newY, width, height, level)
 
 def update_viewport(window, width, height):
     if height == 0:
@@ -78,9 +84,12 @@ def main():
     glfwSwapInterval(1)
 
     startup()
+    randomColor()
+    random_point()
+
     while not glfwWindowShouldClose(window):
         glClear(GL_COLOR_BUFFER_BIT)
-        renderCarpet(-100, -50, 200, 100, 3)
+        renderSierpinskiChaos(10000)
         glFlush()
         glfwSwapBuffers(window)
         glfwPollEvents()

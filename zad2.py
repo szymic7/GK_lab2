@@ -67,7 +67,7 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        renderRect(-50, -50, 100, 100)
+        renderRect(-50, -50, 100, 50)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()

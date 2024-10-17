@@ -7,7 +7,6 @@ def startup():
     update_viewport(None, 400, 400)
     glClearColor(1.0, 1.0, 1.0, 1.0)
 
-
 def shutdown():
     pass
 
@@ -22,7 +21,7 @@ def randomColor():
     red = random.random()
     green = random.random()
     blue = random.random()
-    print("Red: ", red, "\nGreen: ", green, "\nBlue: ", blue)
+    #print("Red: ", red, "\nGreen: ", green, "\nBlue: ", blue)
 
 
 # Zadanie 3
@@ -86,7 +85,7 @@ def main():
 
     startup()
     while not glfwWindowShouldClose(window):
-        renderDeformedRect(-100, -100, 195, 195, 0.0)
+        renderDeformedRect(-50, -50, 100, 50, -0.2)
         glfwSwapBuffers(window)
         glfwPollEvents()
     shutdown()
